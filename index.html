@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BlueWave Technologies – IT Solutions & Services</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #050d1a;
+    --deep: #071428;
+    --blue: #0a66c2;
+    --cyan: #00c8ff;
+    --wave: #00e5ff;
+    --mid: #0e2a4a;
+    --card: #0b1f38;
+    --text: #e0eaf8;
+    --muted: #7a9ec5;
+    --accent: #00e5ff;
+    --white: #ffffff;
+    --border: rgba(0,200,255,0.15);
+  }
+
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--navy);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* ── WAVE CANVAS ── */
+  #wave-bg {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.18;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; width: 100%;
+    z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 5%;
+    background: rgba(5,13,26,0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.5rem; font-weight: 800;
+    color: var(--white);
+    letter-spacing: -0.5px;
+  }
+  .logo span { color: var(--cyan); }
+
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    color: var(--muted); text-decoration: none;
+    font-size: .9rem; font-weight: 500;
+    transition: color .2s;
+  }
+  .nav-links a:hover { color: var(--cyan); }
+
+  .nav-cta {
+    background: var(--cyan); color: var(--navy) !important;
+    padding: .5rem 1.2rem; border-radius: 6px;
+    font-weight: 700 !important;
+    transition: background .2s, transform .2s !important;
+  }
+  .nav-cta:hover { background: var(--wave) !important; transform: translateY(-2px); }
+
+  /* ── HERO ── */
+  #hero {
+    position: relative; z-index: 1;
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    padding: 8rem 5% 5rem;
+  }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: .5rem;
+    background: rgba(0,200,255,0.1);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: .4rem 1rem;
+    font-size: .8rem; color: var(--cyan);
+    margin-bottom: 2rem;
+    animation: fadeDown .8s ease both;
+  }
+  .hero-badge::before {
+    content: ''; width: 8px; height: 8px;
+    border-radius: 50%; background: var(--cyan);
+    animation: pulse 1.8s infinite;
+  }
+
+  @keyframes pulse {
+    0%,100% { opacity:1; transform:scale(1); }
+    50% { opacity:.4; transform:scale(.7); }
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.8rem, 6vw, 5rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -2px;
+    color: var(--white);
+    animation: fadeDown .8s .1s ease both;
+  }
+  h1 em {
+    font-style: normal;
+    background: linear-gradient(90deg, var(--cyan), var(--blue));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    max-width: 600px;
+    margin: 1.5rem auto 0;
+    font-size: 1.1rem; line-height: 1.7;
+    color: var(--muted);
+    animation: fadeDown .8s .2s ease both;
+  }
+
+  .hero-btns {
+    display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;
+    margin-top: 2.5rem;
+    animation: fadeDown .8s .3s ease both;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--cyan), var(--blue));
+    color: var(--navy);
+    padding: .85rem 2rem; border-radius: 8px;
+    font-weight: 700; font-size: 1rem;
+    text-decoration: none;
+    transition: transform .2s, box-shadow .2s;
+    box-shadow: 0 0 30px rgba(0,200,255,0.3);
+  }
+  .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 0 50px rgba(0,200,255,0.5); }
+
+  .btn-outline {
+    border: 1.5px solid var(--border);
+    color: var(--text);
+    padding: .85rem 2rem; border-radius: 8px;
+    font-weight: 500; font-size: 1rem;
+    text-decoration: none;
+    transition: border-color .2s, color .2s;
+  }
+  .btn-outline:hover { border-color: var(--cyan); color: var(--cyan); }
+
+  .hero-stats {
+    display: flex; gap: 3rem; flex-wrap: wrap; justify-content: center;
+    margin-top: 4rem;
+    animation: fadeDown .8s .4s ease both;
+  }
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.2rem; font-weight: 800;
+    color: var(--cyan);
+  }
+  .stat-label { font-size: .8rem; color: var(--muted); margin-top: .2rem; }
+
+  /* ── SECTIONS ── */
+  section { position: relative; z-index: 1; padding: 6rem 5%; }
+  .section-label {
+    font-size: .75rem; font-weight: 700;
+    letter-spacing: 3px; text-transform: uppercase;
+    color: var(--cyan); margin-bottom: .8rem;
+  }
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+    font-weight: 800; letter-spacing: -1px;
+    color: var(--white); margin-bottom: 1rem;
+  }
+  .section-sub { color: var(--muted); max-width: 550px; line-height: 1.7; }
+
+  /* ── SERVICES ── */
+  #services { background: linear-gradient(180deg, var(--navy) 0%, var(--deep) 100%); }
+  .services-header { text-align: center; margin-bottom: 4rem; }
+  .services-header .section-sub { margin: 0 auto; }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    max-width: 1100px; margin: 0 auto;
+  }
+
+  .service-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2rem;
+    transition: transform .3s, border-color .3s, box-shadow .3s;
+    cursor: default;
+    position: relative; overflow: hidden;
+  }
+  .service-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--cyan), var(--blue));
+    opacity: 0;
+    transition: opacity .3s;
+  }
+  .service-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(0,200,255,0.4);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+  }
+  .service-card:hover::before { opacity: 1; }
+
+  .service-icon {
+    width: 52px; height: 52px;
+    background: rgba(0,200,255,0.1);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem; margin-bottom: 1.2rem;
+  }
+  .service-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.15rem; font-weight: 700;
+    color: var(--white); margin-bottom: .7rem;
+  }
+  .service-card p { color: var(--muted); font-size: .9rem; line-height: 1.65; }
+  .service-tags { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1rem; }
+  .tag {
+    font-size: .72rem; padding: .25rem .7rem;
+    background: rgba(0,200,255,0.08);
+    border: 1px solid rgba(0,200,255,0.2);
+    border-radius: 100px; color: var(--cyan);
+  }
+
+  /* ── ABOUT ── */
+  #about {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem; align-items: center;
+    max-width: 1100px; margin: 0 auto;
+  }
+
+  .about-visual {
+    position: relative;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 2.5rem;
+    overflow: hidden;
+  }
+  .about-visual::after {
+    content: '';
+    position: absolute; bottom: -40px; right: -40px;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(0,200,255,0.15), transparent 70%);
+    border-radius: 50%;
+  }
+
+  .profile-row {
+    display: flex; align-items: center; gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .profile-avatar {
+    width: 60px; height: 60px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--cyan), var(--blue));
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-size: 1.3rem; font-weight: 800; color: var(--navy);
+    flex-shrink: 0;
+  }
+  .profile-name {
+    font-family: 'Syne', sans-serif; font-weight: 700; color: var(--white);
+  }
+  .profile-role { font-size: .85rem; color: var(--muted); margin-top: .2rem; }
+
+  .skill-bar { margin-bottom: 1rem; }
+  .skill-top { display: flex; justify-content: space-between; margin-bottom: .4rem; font-size: .85rem; }
+  .skill-top span:last-child { color: var(--cyan); }
+  .bar-track {
+    height: 6px; background: rgba(255,255,255,0.05);
+    border-radius: 10px; overflow: hidden;
+  }
+  .bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--cyan), var(--blue));
+    border-radius: 10px;
+    width: 0%;
+    transition: width 1.2s ease;
+  }
+
+  .about-text { }
+  .about-text .section-label { margin-bottom: .5rem; }
+
+  .exp-item {
+    display: flex; gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .exp-item:last-child { border-bottom: none; }
+  .exp-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--cyan); flex-shrink: 0; margin-top: .35rem;
+    box-shadow: 0 0 10px var(--cyan);
+  }
+  .exp-title { font-weight: 600; color: var(--white); font-size: .95rem; }
+  .exp-org { font-size: .85rem; color: var(--cyan); margin: .2rem 0; }
+  .exp-period { font-size: .8rem; color: var(--muted); }
+
+  /* ── TECH STACK ── */
+  #tech {
+    background: var(--deep);
+    text-align: center;
+  }
+  .tech-grid {
+    display: flex; flex-wrap: wrap; gap: 1rem;
+    justify-content: center; max-width: 900px; margin: 3rem auto 0;
+  }
+  .tech-pill {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: .7rem 1.2rem;
+    font-size: .9rem; color: var(--text);
+    display: flex; align-items: center; gap: .6rem;
+    transition: border-color .2s, transform .2s;
+  }
+  .tech-pill:hover { border-color: var(--cyan); transform: translateY(-3px); }
+  .tech-pill span { font-size: 1.2rem; }
+
+  /* ── CONTACT ── */
+  #contact {
+    background: var(--navy);
+    max-width: 1100px; margin: 0 auto;
+  }
+  .contact-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem; align-items: start;
+  }
+  .contact-info-item {
+    display: flex; align-items: flex-start; gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .ci-icon {
+    width: 44px; height: 44px;
+    background: rgba(0,200,255,0.1);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; flex-shrink: 0;
+  }
+  .ci-label { font-size: .78rem; color: var(--muted); margin-bottom: .2rem; }
+  .ci-val { color: var(--white); font-size: .95rem; }
+
+  .contact-form { display: flex; flex-direction: column; gap: 1rem; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .contact-form input,
+  .contact-form textarea,
+  .contact-form select {
+    width: 100%;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: .85rem 1rem;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: .9rem;
+    transition: border-color .2s;
+    outline: none;
+  }
+  .contact-form input:focus,
+  .contact-form textarea:focus,
+  .contact-form select:focus { border-color: var(--cyan); }
+  .contact-form textarea { min-height: 120px; resize: vertical; }
+  .contact-form select option { background: var(--card); }
+
+  .btn-send {
+    background: linear-gradient(135deg, var(--cyan), var(--blue));
+    color: var(--navy);
+    border: none; border-radius: 8px;
+    padding: .9rem; font-weight: 700; font-size: 1rem;
+    cursor: pointer; font-family: 'DM Sans', sans-serif;
+    transition: opacity .2s, transform .2s;
+  }
+  .btn-send:hover { opacity: .9; transform: translateY(-2px); }
+
+  .form-note { font-size: .78rem; color: var(--muted); text-align: center; }
+
+  /* ── FOOTER ── */
+  footer {
+    position: relative; z-index: 1;
+    text-align: center;
+    padding: 2.5rem 5%;
+    border-top: 1px solid var(--border);
+    color: var(--muted); font-size: .85rem;
+  }
+  footer strong { color: var(--cyan); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeDown {
+    from { opacity:0; transform: translateY(-18px); }
+    to { opacity:1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity .8s ease, transform .8s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    #about { grid-template-columns: 1fr; gap: 3rem; }
+    .contact-wrap { grid-template-columns: 1fr; gap: 2.5rem; }
+    .form-row { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    h1 { letter-spacing: -1px; }
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--navy); }
+  ::-webkit-scrollbar-thumb { background: var(--mid); border-radius: 10px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--cyan); }
+</style>
+</head>
+<body>
+
+<canvas id="wave-bg"></canvas>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">Blue<span>Wave</span> Technologies</div>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#tech">Tech Stack</a></li>
+    <li><a href="#contact" class="nav-cta">Hire Me</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-badge">⚡ Available for Projects Worldwide</div>
+  <h1>IT Solutions &amp;<br><em>Network Expertise</em><br>You Can Trust</h1>
+  <p class="hero-sub">Professional IT support, network administration, and web development services — delivered remotely or on-site across Thailand, Pakistan, and globally.</p>
+  <div class="hero-btns">
+    <a href="#services" class="btn-primary">Explore Services</a>
+    <a href="#contact" class="btn-outline">Get a Free Quote</a>
+  </div>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">4+</div><div class="stat-label">Years Experience</div></div>
+    <div class="stat"><div class="stat-num">3</div><div class="stat-label">Countries Served</div></div>
+    <div class="stat"><div class="stat-num">10+</div><div class="stat-label">Projects Delivered</div></div>
+    <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Client Focused</div></div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="services-header reveal">
+    <div class="section-label">What We Offer</div>
+    <h2 class="section-title">Core IT Services</h2>
+    <p class="section-sub">From network setup to web development — complete IT solutions for businesses of all sizes.</p>
+  </div>
+  <div class="services-grid">
+
+    <div class="service-card reveal">
+      <div class="service-icon">🌐</div>
+      <h3>Network Setup &amp; Administration</h3>
+      <p>LAN/WAN configuration, router setup, Wi-Fi infrastructure, network security, and monitoring using enterprise-grade equipment.</p>
+      <div class="service-tags">
+        <span class="tag">TP-Link</span><span class="tag">Cisco</span><span class="tag">Linksys</span><span class="tag">PingPlotter</span>
+      </div>
+    </div>
+
+    <div class="service-card reveal">
+      <div class="service-icon">🖥️</div>
+      <h3>IT Support &amp; System Setup</h3>
+      <p>Hardware/software troubleshooting, PC and workstation builds, OS installation (Windows &amp; Linux), and server maintenance.</p>
+      <div class="service-tags">
+        <span class="tag">Windows 10/11</span><span class="tag">Ubuntu</span><span class="tag">Red Hat</span><span class="tag">CentOS</span>
+      </div>
+    </div>
+
+    <div class="service-card reveal">
+      <div class="service-icon">🖧</div>
+      <h3>Server Management</h3>
+      <p>Server installation, patching, uptime monitoring, user account management, CCTV integration, and remote access via RDP/FTP/SFTP.</p>
+      <div class="service-tags">
+        <span class="tag">RDP</span><span class="tag">FTP</span><span class="tag">SFTP</span><span class="tag">Patching</span>
+      </div>
+    </div>
+
+    <div class="service-card reveal">
+      <div class="service-icon">💻</div>
+      <h3>Web Development</h3>
+      <p>Website design, development, and maintenance using modern frameworks. Responsive layouts, CMS setup, and performance optimization.</p>
+      <div class="service-tags">
+        <span class="tag">HTML/CSS</span><span class="tag">JavaScript</span><span class="tag">WordPress</span><span class="tag">CodeIgniter</span>
+      </div>
+    </div>
+
+    <div class="service-card reveal">
+      <div class="service-icon">🔒</div>
+      <h3>Network Security</h3>
+      <p>Security audits, firewall configuration, software security systems, and vulnerability assessment to protect your infrastructure.</p>
+      <div class="service-tags">
+        <span class="tag">Firewall</span><span class="tag">VPN</span><span class="tag">Security Audit</span>
+      </div>
+    </div>
+
+    <div class="service-card reveal">
+      <div class="service-icon">🎨</div>
+      <h3>Graphics &amp; Digital Design</h3>
+      <p>Professional graphic design, branding assets, layout design, and digital marketing materials for your business.</p>
+      <div class="service-tags">
+        <span class="tag">CorelDraw</span><span class="tag">Branding</span><span class="tag">SEO</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section style="padding: 6rem 5%; position:relative; z-index:1;">
+  <div id="about">
+    <div class="about-visual reveal">
+      <div class="profile-row">
+        <div class="profile-avatar">ZM</div>
+        <div>
+          <div class="profile-name">Zafarullah Memon</div>
+          <div class="profile-role">IT Manager · Network Administrator · Web Developer</div>
+        </div>
+      </div>
+
+      <div class="skill-bar">
+        <div class="skill-top"><span>Network Administration</span><span>92%</span></div>
+        <div class="bar-track"><div class="bar-fill" data-width="92"></div></div>
+      </div>
+      <div class="skill-bar">
+        <div class="skill-top"><span>IT Support &amp; System Setup</span><span>95%</span></div>
+        <div class="bar-track"><div class="bar-fill" data-width="95"></div></div>
+      </div>
+      <div class="skill-bar">
+        <div class="skill-top"><span>Web Development</span><span>80%</span></div>
+        <div class="bar-track"><div class="bar-fill" data-width="80"></div></div>
+      </div>
+      <div class="skill-bar">
+        <div class="skill-top"><span>Linux / Server Admin</span><span>85%</span></div>
+        <div class="bar-track"><div class="bar-fill" data-width="85"></div></div>
+      </div>
+      <div class="skill-bar">
+        <div class="skill-top"><span>Data Science (Python)</span><span>65%</span></div>
+        <div class="bar-track"><div class="bar-fill" data-width="65"></div></div>
+      </div>
+    </div>
+
+    <div class="about-text reveal">
+      <div class="section-label">About BlueWave Technologies</div>
+      <h2 class="section-title">4+ Years of Real-World IT Excellence</h2>
+      <p class="section-sub" style="margin-bottom:2rem;">Founded by Zafarullah Memon, BlueWave Technologies delivers professional IT services built on hands-on experience across Pakistan and Thailand — from government-funded infrastructure projects to academic research centers.</p>
+
+      <div class="exp-item">
+        <div class="exp-dot"></div>
+        <div>
+          <div class="exp-title">IT Manager</div>
+          <div class="exp-org">AI Technology Center, Asian Institute of Technology, Thailand</div>
+          <div class="exp-period">Oct 2024 – Present</div>
+        </div>
+      </div>
+      <div class="exp-item">
+        <div class="exp-dot"></div>
+        <div>
+          <div class="exp-title">Network Administrator</div>
+          <div class="exp-org">Asian Institute of Technology, Thailand</div>
+          <div class="exp-period">Oct 2023 – Sep 2024</div>
+        </div>
+      </div>
+      <div class="exp-item">
+        <div class="exp-dot"></div>
+        <div>
+          <div class="exp-title">Network Administrator</div>
+          <div class="exp-org">Sindh Resilience Project – Irrigation Dept., Karachi</div>
+          <div class="exp-period">Feb 2022 – Sep 2023</div>
+        </div>
+      </div>
+      <div class="exp-item">
+        <div class="exp-dot"></div>
+        <div>
+          <div class="exp-title">IT Engineer</div>
+          <div class="exp-org">SR Traders – Sindh Resilience Project</div>
+          <div class="exp-period">Jun 2021 – Jan 2022</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TECH STACK -->
+<section id="tech">
+  <div class="reveal">
+    <div class="section-label" style="text-align:center;">Technology</div>
+    <h2 class="section-title">Tools &amp; Technologies</h2>
+  </div>
+  <div class="tech-grid">
+    <div class="tech-pill reveal"><span>🐍</span> Python</div>
+    <div class="tech-pill reveal"><span>🐧</span> Linux</div>
+    <div class="tech-pill reveal"><span>🪟</span> Windows Server</div>
+    <div class="tech-pill reveal"><span>🌐</span> HTML / CSS / JS</div>
+    <div class="tech-pill reveal"><span>🔥</span> PHP / CodeIgniter</div>
+    <div class="tech-pill reveal"><span>📰</span> WordPress</div>
+    <div class="tech-pill reveal"><span>🌍</span> Google Earth Engine</div>
+    <div class="tech-pill reveal"><span>🔗</span> RDP / FTP / SFTP</div>
+    <div class="tech-pill reveal"><span>📡</span> Cisco / TP-Link</div>
+    <div class="tech-pill reveal"><span>📊</span> PingPlotter</div>
+    <div class="tech-pill reveal"><span>🎨</span> CorelDraw</div>
+    <div class="tech-pill reveal"><span>📦</span> QuickBooks</div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section style="padding: 6rem 5%; position:relative; z-index:1;">
+  <div id="contact">
+    <div class="contact-wrap">
+      <div class="reveal">
+        <div class="section-label">Get In Touch</div>
+        <h2 class="section-title">Let's Work Together</h2>
+        <p class="section-sub" style="margin-bottom:2.5rem;">Have a project in mind? Need IT support or a new website? Reach out and get a free consultation.</p>
+
+        <div class="contact-info-item">
+          <div class="ci-icon">📧</div>
+          <div>
+            <div class="ci-label">Email</div>
+            <div class="ci-val">zafarullahjani@gmail.com</div>
+          </div>
+        </div>
+        <div class="contact-info-item">
+          <div class="ci-icon">📞</div>
+          <div>
+            <div class="ci-label">Phone / WhatsApp</div>
+            <div class="ci-val">+92-332-3996271 | +660816712801</div>
+          </div>
+        </div>
+        <div class="contact-info-item">
+          <div class="ci-icon">📍</div>
+          <div>
+            <div class="ci-label">Base Location</div>
+            <div class="ci-val">Pathum Thani, Thailand &amp; Hyderabad, Pakistan</div>
+          </div>
+        </div>
+        <div class="contact-info-item">
+          <div class="ci-icon">🌏</div>
+          <div>
+            <div class="ci-label">Availability</div>
+            <div class="ci-val">Remote &amp; On-site · Global Projects Welcome</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal">
+        <div style="background:var(--card); border:1px solid var(--border); border-radius:16px; padding:2rem;">
+          <h3 style="font-family:'Syne',sans-serif; margin-bottom:1.5rem; color:var(--white);">Send a Message</h3>
+          <div class="contact-form">
+            <div class="form-row">
+              <input type="text" placeholder="Your Name" />
+              <input type="email" placeholder="Email Address" />
+            </div>
+            <select>
+              <option value="" disabled selected>Select a Service</option>
+              <option>Network Setup &amp; Administration</option>
+              <option>IT Support &amp; System Setup</option>
+              <option>Server Management</option>
+              <option>Web Development</option>
+              <option>Network Security</option>
+              <option>Graphics &amp; Digital Design</option>
+              <option>Other / Custom Project</option>
+            </select>
+            <input type="text" placeholder="Subject" />
+            <textarea placeholder="Describe your project or requirement..."></textarea>
+            <button class="btn-send" onclick="handleSend()">Send Message →</button>
+            <p class="form-note">⚡ Typically responds within 24 hours</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>&copy; 2025 <strong>BlueWave Technologies</strong> · All Rights Reserved · Built with ❤️ by Zafarullah Memon</p>
+</footer>
+
+<script>
+// ── WAVE CANVAS ──
+const canvas = document.getElementById('wave-bg');
+const ctx = canvas.getContext('2d');
+let W, H, t = 0;
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+function drawWave() {
+  ctx.clearRect(0, 0, W, H);
+  const waves = [
+    { amp: 40, freq: 0.008, speed: 0.02, y: H * 0.4, color: 'rgba(0,200,255,0.5)' },
+    { amp: 30, freq: 0.012, speed: 0.015, y: H * 0.6, color: 'rgba(10,102,194,0.4)' },
+    { amp: 50, freq: 0.006, speed: 0.025, y: H * 0.75, color: 'rgba(0,229,255,0.3)' },
+  ];
+  waves.forEach(w => {
+    ctx.beginPath();
+    ctx.moveTo(0, H);
+    for (let x = 0; x <= W; x += 4) {
+      const y = w.y + Math.sin(x * w.freq + t * w.speed * 60) * w.amp;
+      ctx.lineTo(x, y);
+    }
+    ctx.lineTo(W, H); ctx.lineTo(0, H);
+    ctx.closePath();
+    ctx.fillStyle = w.color;
+    ctx.fill();
+  });
+  t++;
+  requestAnimationFrame(drawWave);
+}
+drawWave();
+
+// ── SCROLL REVEAL ──
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      // Animate skill bars
+      e.target.querySelectorAll('.bar-fill').forEach(b => {
+        b.style.width = b.dataset.width + '%';
+      });
+    }
+  });
+}, { threshold: 0.1 });
+reveals.forEach(r => observer.observe(r));
+
+// ── FORM HANDLER ──
+function handleSend() {
+  const btn = document.querySelector('.btn-send');
+  btn.textContent = '✅ Message Sent!';
+  btn.style.background = 'linear-gradient(135deg, #00c853, #007e33)';
+  setTimeout(() => {
+    btn.textContent = 'Send Message →';
+    btn.style.background = '';
+  }, 3000);
+}
+</script>
+</body>
+</html>
